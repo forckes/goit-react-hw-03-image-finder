@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import { Box } from "../Box/Box";
 import {
 	StyledForm,
@@ -9,48 +9,44 @@ import {
 import { toast } from "react-toastify";
 import IconButton from "../IconButton/IconButton";
 
-export default class Searchbar extends Component {
-	state = {
-		imageName: ""
-	};
+export default function Searchbar({ onSubmit }) {
+	const [imageName, setImageName] = useState("");
 
-	handleSubmit = e => {
+	const handleSubmit = e => {
 		e.preventDefault();
-		if (this.state.imageName.trim() === "") {
+		if (imageName.trim() === "") {
 			toast.error("Write image name");
 			return;
 		}
-		this.props.onSubmit(this.state.imageName);
-		this.setState({ imageName: "" });
+		onSubmit(imageName);
+		setImageName("");
 	};
-	handleChange = e => {
-		this.setState({ imageName: e.currentTarget.value.toLowerCase() });
+	const handleChange = e => {
+		setImageName(e.currentTarget.value.toLowerCase());
 	};
-	render() {
-		const { imageName } = this.state;
-		return (
-			<Box
-				width='100%'
-				display='flex'
-				alignItems='center'
-				justifyContent='center'
-			>
-				<StyledHeader>
-					<StyledForm onSubmit={this.handleSubmit}>
-						<StyledInput
-							onChange={this.handleChange}
-							value={imageName}
-							type='text'
-							autoComplete='off'
-							autoFocus
-							placeholder='Search images'
-						/>
-						<IconButton type='submit'>
-							<StyledIcon />
-						</IconButton>
-					</StyledForm>
-				</StyledHeader>
-			</Box>
-		);
-	}
+
+	return (
+		<Box
+			width='100%'
+			display='flex'
+			alignItems='center'
+			justifyContent='center'
+		>
+			<StyledHeader>
+				<StyledForm onSubmit={handleSubmit}>
+					<StyledInput
+						onChange={handleChange}
+						value={imageName}
+						type='text'
+						autoComplete='off'
+						autoFocus
+						placeholder='Search images'
+					/>
+					<IconButton type='submit'>
+						<StyledIcon />
+					</IconButton>
+				</StyledForm>
+			</StyledHeader>
+		</Box>
+	);
 }
